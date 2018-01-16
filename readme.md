@@ -8,15 +8,17 @@ Here is a little demo:
 
 # Installation
 
-Download the powershell scripts to some folder and configure a hook in Tortoise SVN to run the `post-commit-hook.ps1` script on commit with the following values
+Download the powershell scripts to some folder and configure a hooks in Tortoise SVN like this:
+1. Open the Tortoise SVN settings (right-click->TortoiseSVN->settings) and go to "Hook scripts"
+1. Add hooks like shown below:
 
-* Hook Type = "Post-Commit Hook"
-* Working Copy Path = _\<the-path-to-your-working-copy-folder\>_
-* Command Line to Execute = `powershell.exe -ExecutionPolicy Unrestricted -File "C:\the-folder-where-you-downloaded-the-files\post-commit-hook.ps1"`
+|Hook type  |Path   |Command Line   |Wait   |Show/Hide  | Enforce|
+|-----------|-------|---------------|-------|-----------|--------|
+`pre_commit_hook`|your working copy path|`powershell.exe -ExecutionPolicy Unrestricted -File "C:\install-folder\pre-commit-hook.ps1"`|true|hide|true
+`post_commit_hook`|your working copy path|`powershell.exe -ExecutionPolicy Unrestricted -File "C:\install-folder\post-commit-hook.ps1"`|true|hide|true
 
-Here is how it looks with `the-folder-where-you-downloaded-the-files=C:\Users\Dima\Dev\other\svn-jira-cmd\` and `the-path-to-your-working-copy-folder=C:\Dev\other\test-a`
+Where `install-folder` is the folder where you placed the downloaded scripts and "your working copy path" is the root folder where you checked out your SVN repository 
 
-![config demo](https://dha4w82d62smt.cloudfront.net/items/2L1E301w1w1e2x1e1n3M/Image%202018-01-16%20at%206.51.04%20PM.png)
 # Commands
 These command/shortucts are inspired by quick actions like the ones found on [GitLab](https://docs.gitlab.com/ee/user/project/quick_actions.html).
 All commands must appear as separate lines at the end of the commit mesage. They will not be a part of the final commit message. You can use each command more than once, if necessary

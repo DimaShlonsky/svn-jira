@@ -42,6 +42,10 @@ if ($phase -ne "post"){
 }
 $origWd = $pwd
 try{
+    $errText = Get-Content $errorFile
+    if ($errText){
+        return
+    }
     Set-Location $PSScriptRoot
     #$issueIdRegex = "(?<id>[A-Z]{2,5}-\d+)"
     $svnInfoXml = svn info $workingDir --xml

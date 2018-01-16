@@ -1,7 +1,9 @@
 param(
+    [ValidateSet('getIssue','addComment','transitionIssue','getTransitionList')]
     [string]$action,
     [string]$issue,
-    [string]$comment
+    [string]$comment,
+    [string]$transition
 )
 $cred=$null;
 try{
@@ -21,9 +23,24 @@ $headers = @{ Authorization = $basicAuthValue; Accept = "application/json"; "Con
 
 $baseUrl = "https://seatgeekenterprise.atlassian.net/rest/api/2/"
 
-if ($action -eq "getIssue"){
-    Invoke-RestMethod -Uri "${baseUrl}/issue/${issue}/" -Credential $cred -Headers $headers 
-}elseif($action -eq "addComment"){
-    $req = @{body=$comment} | ConvertTo-Json
-    Invoke-RestMethod -Uri "${baseUrl}/issue/${issue}/comment" -Method Post -Credential $cred -Headers $headers -Body $req -Proxy "http://localhost:8888"
+switch ($action)
+{
+    "getIssue"{
+        Invoke-RestMethod -Uri "${baseUrl}/issue/${issue}/" -Credential $cred -Headers $headers 
+        break
+    }
+    "addComment"{
+        $req = @{body=$comment} | ConvertTo-Json
+        Invoke-RestMethod -Uri "${baseUrl}/issue/${issue}/comment" -Method Post -Credential $cred -Headers $headers -Body $req
+        break
+    }
+    "transitionIssue"{
+        $req = @{transition=@{id=$transition}} | ConvertTo-Json
+        Invoke-RestMethod -Uri "${baseUrl}/issue/${issue}/transitions" -Method Post -Credential $cred -Headers $headers -Body $req # -Proxy "http://localhost:8888"
+        break
+    }
+    "getTransitionList"{
+        Invoke-RestMethod -Uri "${baseUrl}/issue/${issue}/transitions" -Credential $cred -Headers $headers # -Proxy "http://localhost:8888"
+        break
+    }
 }

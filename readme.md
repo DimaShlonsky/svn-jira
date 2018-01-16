@@ -26,5 +26,18 @@ All commands must appear as separate lines at the end of the commit mesage. They
 * `/fixed [issue]` (aka 'fixes') - transition the issue to the "Fixed not comitted" state
 * `/view [issue]` - open the issue page
 
+:warning: Because the commands are stripped from the commit message, it is recommended that you also mention the name of the issue in the message itself in order to be able to see the issue number in SVN log's "Bug Id" column. When you do this you don't have to specify the issue id in the command - it will use the id you mentioned.
+For example:
+```
+Did so-and-so change (DEV-9999)
+/fixed
+```
+
+If your commit resolves multiple issues, you can do:
+```
+Did some other change (DEV-10001)(DEV-10002)
+/fixed DEV-10001
+/fixed DEV-10002
+```
 # Caveats
 :warning: Note that TSVN hooks work only with TSVN and will not run if you use SVN from commandline or through some other implementation

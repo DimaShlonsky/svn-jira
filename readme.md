@@ -10,6 +10,7 @@ Here is a little demo:
 
 Download the powershell scripts to some folder and configure a hooks in Tortoise SVN like this:
 1. Open the Tortoise SVN settings (right-click->TortoiseSVN->settings) and go to "Hook scripts"
+1. [Unblock](https://blogs.msdn.microsoft.com/delay/p/unblockingdownloadedfile/) all the ps1 scripts in the installation folder
 1. Add hooks like shown below:
 
 |Hook type  |Path   |Command Line   |Wait   |Show/Hide  | Enforce|

@@ -14,8 +14,8 @@ Download the powershell scripts to some folder and configure a hooks in Tortoise
 
 |Hook type  |Path   |Command Line   |Wait   |Show/Hide  | Enforce|
 |-----------|-------|---------------|-------|-----------|--------|
-`pre_commit_hook`|your working copy path|`powershell.exe -ExecutionPolicy Unrestricted -File "C:\install-folder\pre-commit-hook.ps1"`|true|hide|true
-`post_commit_hook`|your working copy path|`powershell.exe -ExecutionPolicy Unrestricted -File "C:\install-folder\post-commit-hook.ps1"`|true|hide|true
+`pre_commit_hook`|your working copy path|`powershell.exe -ExecutionPolicy Unrestricted -NonInteractive -File "C:\install-folder\pre-commit-hook.ps1"`|true|hide|true
+`post_commit_hook`|your working copy path|`powershell.exe -ExecutionPolicy Unrestricted -NonInteractive -File "C:\install-folder\post-commit-hook.ps1"`|true|hide|true
 
 Where `install-folder` is the folder where you placed the downloaded scripts and "your working copy path" is the root folder where you checked out your SVN repository 
 

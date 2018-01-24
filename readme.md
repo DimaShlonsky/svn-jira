@@ -10,12 +10,13 @@ Here is a little demo:
 
 Download the powershell scripts to some folder and configure a hooks in Tortoise SVN like this:
 1. Open the Tortoise SVN settings (right-click->TortoiseSVN->settings) and go to "Hook scripts"
+1. [Unblock](https://blogs.msdn.microsoft.com/delay/p/unblockingdownloadedfile/) all the ps1 scripts in the installation folder
 1. Add hooks like shown below:
 
 |Hook type  |Path   |Command Line   |Wait   |Show/Hide  | Enforce|
 |-----------|-------|---------------|-------|-----------|--------|
-`pre_commit_hook`|your working copy path|`powershell.exe -ExecutionPolicy Unrestricted -File "C:\install-folder\pre-commit-hook.ps1"`|true|hide|true
-`post_commit_hook`|your working copy path|`powershell.exe -ExecutionPolicy Unrestricted -File "C:\install-folder\post-commit-hook.ps1"`|true|hide|true
+`pre_commit_hook`|your working copy path|`powershell.exe -ExecutionPolicy Unrestricted -NonInteractive -File "C:\install-folder\pre-commit-hook.ps1"`|true|hide|true
+`post_commit_hook`|your working copy path|`powershell.exe -ExecutionPolicy Unrestricted -NonInteractive -File "C:\install-folder\post-commit-hook.ps1"`|true|hide|true
 
 Where `install-folder` is the folder where you placed the downloaded scripts and "your working copy path" is the root folder where you checked out your SVN repository 
 

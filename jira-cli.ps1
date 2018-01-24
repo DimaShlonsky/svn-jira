@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('getIssue','addComment','transitionIssue','getTransitionList')]
+    [ValidateSet('getIssue','addComment','transitionIssue','getTransitionList','getMyProfile')]
     [string]$action,
     [string]$issue,
     [string]$comment,
@@ -41,6 +41,10 @@ switch ($action)
     }
     "getTransitionList"{
         Invoke-RestMethod -Uri "${baseUrl}/issue/${issue}/transitions" -Credential $cred -Headers $headers # -Proxy "http://localhost:8888"
+        break
+    }
+    "getMyProfile"{
+        Invoke-RestMethod -Uri "${baseUrl}/myself" -Credential $cred -Headers $headers # -Proxy "http://localhost:8888"
         break
     }
 }

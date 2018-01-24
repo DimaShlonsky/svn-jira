@@ -10,9 +10,13 @@ if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Adm
     throw "Please run this with as administrator"
 }
 
+function NormalizePath ($path) {
+    return  Join-Path -Path $path  ""
+}
+
 function Set-HookData($hookLines, $hookData) {
     for($i=0; $i -lt $hookLines.Count; $i+=6){
-        if (($hookLines[$i] -eq $hookData.type) -and ($hookLines[$i+1] -eq $hookData.path)){
+        if (($hookLines[$i] -eq $hookData.type) -and ((NormalizePath $hookLines[$i+1]) -eq (NormalizePath $hookData.path))){
             break;
         }
     }
@@ -34,7 +38,7 @@ try{
     #unblock all the scripts
     Unblock-File *.ps1
     #normalize wc dir
-    $workingDir = Join-Path -Path $workingDir  ""
+    $workingDir = NormalizePath($workingDir)
     #get the working copy dir
     $svnInfoXml = svn info $workingDir --xml
     if ($LASTEXITCODE -eq 0){

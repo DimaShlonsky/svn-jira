@@ -10,11 +10,11 @@ Here is a little demo:
 
 1. Make sure you have your JIRA username and password. If you don't, follow [these](https://seatgeekenterprise.atlassian.net/wiki/spaces/~dshlonsky/pages/41615836/How+to+get+JIRA+username+and+password) instructions to get it.
 1. Download the powershell scripts to some folder. This will be the installation folder.
-1. Open a Powershell prompt **as admin**, `cd` to the installation folder and run the install script for the SVN working copy folder that you want to integrate with JIRA. For example, if your working folder is `c:\SroDev\CurrentVersion`, run:
+1. Open a Powershell prompt **as admin**, `cd` to the installation folder and run the install script for the SVN working copy folder that you want to integrate with JIRA. For example, if your installation folder is `c:\SroDev\svn-jira\` and your working folder is `c:\SroDev\CurrentVersion`, run:
     ```
-    PS C:\> cd C:\tmp\svn-jira-master
-    PS C:\tmp\svn-jira-master> Set-ExecutionPolicy -Scope Process Unrestricted
-    PS C:\tmp\svn-jira-master> .\install.ps1 d:\SroDev\CurrentVersion
+    PS C:\> cd C:\SroDev\svn-jira\
+    PS C:\SroDev\svn-jira> Set-ExecutionPolicy -Scope Process Unrestricted
+    PS C:\SroDev\svn-jira> .\install.ps1 d:\SroDev\CurrentVersion
     ```
 1. Provide your JIRA username and password
 1. Done!

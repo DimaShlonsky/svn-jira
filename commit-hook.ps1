@@ -67,13 +67,19 @@ try{
     }
     Write-Debug "BugUrl is $bugUrl"
     $svnLogRegexes = svn propget bugtraq:logregex $svnRootDir
-    $regexPattern = $svnLogRegexes[0]
+    if ($LASTEXITCODE -ne 0){
+        Write-Error "Error getting svn props for '$svnRootDir'"
+        exit 1;
+    }
+    if ($svnLogRegexes -and ($svnLogRegexes.Length -ge 1)){
+        $regexPattern = $svnLogRegexes[0]
+        $regexBugIdPattern = $svnLogRegexes[1]
+    }
     if (-not $regexPattern){
         Write-Debug "Setting regexPattern from default"
         $regexPattern = "((\s*((R|r)esolve(d|s)|(F|f)ixe(d|s))\s+)?([A-Z]{2,5}-\d{2,}))|\(([A-Z]{2,5}-\d{2,})\)"
     }
     Write-Debug "regexPattern in $regexPattern"
-    $regexBugIdPattern = $svnLogRegexes[1]
     if (-not $regexBugIdPattern){
         $regexBugIdPattern = "([A-Z]{2,5}-\d{2,})"
         Write-Debug "Setting regexBugIdPattern pattern from default"
@@ -89,7 +95,7 @@ try{
     Write-Debug "final msg is $msg"
 
     $match = $msg | Select-String -Pattern $regexPattern -AllMatches | ForEach-Object {$_.Matches.Value}
-    [System.Collections.ArrayList]$mentionedIssues = $match | Select-String -Pattern $regexBugIdPattern -AllMatches | ForEach-Object {$_.Matches.Value}
+    [System.Collections.ArrayList]$mentionedIssues = @($match | Select-String -Pattern $regexBugIdPattern -AllMatches | ForEach-Object {$_.Matches.Value})
     $mentionedIssues = @($mentionedIssues | Sort-Object | Get-Unique)
 
     foreach($match in $cmdMatches){
@@ -127,7 +133,7 @@ try{
         }
     }
 
-    $mentionedIssues = ($mentionedIssues | Sort-Object | Get-Unique)
+    $mentionedIssues = @($mentionedIssues | Sort-Object | Get-Unique)
     foreach($mentionedIssue in $mentionedIssues){
         $commentText = "This issue is mentioned in commit ${revisionNumber}:`n{quote}${msg}{quote}"
         Write-Debug "processing comment '$commentText' for bug $mentionedIssue"

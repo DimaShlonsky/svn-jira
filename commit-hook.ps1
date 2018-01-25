@@ -80,25 +80,26 @@ try{
     Write-Debug "msg is $msg"
     $cmdMatches = $msg | Select-String -Pattern $cmdRegex  -AllMatches | ForEach-Object {$_.Matches}
 
-    $match = $msg | Select-String -Pattern $regexPattern | ForEach-Object {$_.Matches.Value}
-    $bugId = $match | Select-String -Pattern $regexBugIdPattern | ForEach-Object {$_.Matches.Value}
-
     $msg = $msg -replace $cmdRegex,""
     $msg = [String]::Join("`n", $msg).Trim()
     Write-Debug "final msg is $msg"
 
-    if ($bugId){
-        $commentText = "This issue is mentioned in commit ${revisionNumber}:`n{quote}${msg}{quote}"
-        Write-Debug "processing comment '$commentText' for bug $bugId"
-        .\jira-cli.ps1 -action addComment -issue $bugId -comment $commentText
-    }
-
+    $match = $msg | Select-String -Pattern $regexPattern -AllMatches | ForEach-Object {$_.Matches.Value}
+    [System.Collections.ArrayList]$mentionedIssues = $match | Select-String -Pattern $regexBugIdPattern -AllMatches | ForEach-Object {$_.Matches.Value}
+    $mentionedIssues = @($mentionedIssues | Sort-Object | Get-Unique)
 
     foreach($match in $cmdMatches){
         $cmd = $match.Groups["cmd"].Value
         $cmd = $cmd.ToLower();
         $issue = $match.Groups["id"].Value
-        if ($bugId -and (-not $issue)){$issue = $bugId}
+        if (-not $issue){
+            if ($mentionedIssues.Length -eq 1){
+                $issue = mentionedIssues[0]
+            }
+        }else{
+            $mentionedIssues.Add($issue)
+            $mentionedIssues = @($mentionedIssues | Sort-Object | Get-Unique)
+        }
         Write-Debug "processing command '$cmd' for issue $issue"
         switch -Regex ($cmd) {
             "view"{
@@ -120,6 +121,13 @@ try{
                 throw "Unrecognized /command"
             }
         }
+    }
+
+    $mentionedIssues = ($mentionedIssues | Sort-Object | Get-Unique)
+    foreach($mentionedIssue in $mentionedIssues){
+        $commentText = "This issue is mentioned in commit ${revisionNumber}:`n{quote}${msg}{quote}"
+        Write-Debug "processing comment '$commentText' for bug $mentionedIssue"
+        .\jira-cli.ps1 -action addComment -issue $mentionedIssue -comment $commentText
     }
 }finally{
     Set-Location $origWd

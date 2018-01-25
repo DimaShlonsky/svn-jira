@@ -60,20 +60,24 @@ try{
         exit 1;
     }
     $svnRootDir = [string]::Join("", $svnInfoXml) | Select-Xml -XPath "//wcroot-abspath/text()" | ForEach-Object {$_.Node.Value}
-    $bugUrl = svn propget bugtraq:url $svnRootDir
-    if (-not $bugUrl){
+    if (svn proplist -q $svnRootDir | Select-String "bugtraq:url"){
+        $bugUrl = svn propget bugtraq:url $svnRootDir
+    }else{
         Write-Debug "Setting BugUrl from default"
         $bugUrl = "https://seatgeekenterprise.atlassian.net/browse/%BUGID%"
     }
     Write-Debug "BugUrl is $bugUrl"
-    $svnLogRegexes = svn propget bugtraq:logregex $svnRootDir
+
+    if (svn proplist -q $svnRootDir | Select-String "bugtraq:logregex"){
+        $svnLogRegexes = svn propget bugtraq:logregex $svnRootDir
+        if ($svnLogRegexes.Length -ge 1){
+            $regexPattern = $svnLogRegexes[0]
+            $regexBugIdPattern = $svnLogRegexes[1]
+        }
+    }
     if ($LASTEXITCODE -ne 0){
         Write-Error "Error getting svn props for '$svnRootDir'"
         exit 1;
-    }
-    if ($svnLogRegexes -and ($svnLogRegexes.Length -ge 1)){
-        $regexPattern = $svnLogRegexes[0]
-        $regexBugIdPattern = $svnLogRegexes[1]
     }
     if (-not $regexPattern){
         Write-Debug "Setting regexPattern from default"

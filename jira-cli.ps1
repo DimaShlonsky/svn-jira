@@ -5,6 +5,7 @@ param(
     [string]$comment,
     [string]$transition
 )
+Write-Debug "Executing $($MyInvocation.ScriptName) with params $($MyInvocation.Line)"
 $cred=$null;
 try{
     $cred = Import-Clixml -Path "jira.cred"

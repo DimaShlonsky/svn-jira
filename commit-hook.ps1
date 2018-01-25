@@ -55,6 +55,10 @@ try{
     Set-Location $PSScriptRoot
     #$issueIdRegex = "(?<id>[A-Z]{2,5}-\d+)"
     $svnInfoXml = svn info $workingDir --xml
+    if ($LASTEXITCODE -ne 0){
+        Write-Error "Error getting svn info for '$workingDir'"
+        exit 1;
+    }
     $svnRootDir = [string]::Join("", $svnInfoXml) | Select-Xml -XPath "//wcroot-abspath/text()" | ForEach-Object {$_.Node.Value}
     $bugUrl = svn propget bugtraq:url $svnRootDir
     if (-not $bugUrl){

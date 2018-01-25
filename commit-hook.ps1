@@ -71,7 +71,7 @@ try{
     Write-Debug "regexPattern in $regexPattern"
     $regexBugIdPattern = $svnLogRegexes[1]
     if (-not $regexBugIdPattern){
-        $regexPattern = "([A-Z]{2,5}-\d{2,})"
+        $regexBugIdPattern = "([A-Z]{2,5}-\d{2,})"
         Write-Debug "Setting regexBugIdPattern pattern from default"
     }
     Write-Debug "regexBugIdPattern in $regexBugIdPattern"

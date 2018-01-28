@@ -8,6 +8,11 @@ Here is a little demo:
 
 # Installation
 
+## Prerequisites
+1. Tortoise SVN
+2. Powershell 3.0 or better. You should have this already unless you are running Windows 7, in which case you will need to upgrade you powershell by installing [Windows Management Framework 5.0](https://www.microsoft.com/en-us/download/details.aspx?id=50395)
+
+## Procedure
 1. Make sure you have your JIRA username and password. If you don't, follow [these](https://seatgeekenterprise.atlassian.net/wiki/spaces/~dshlonsky/pages/41615836/How+to+get+JIRA+username+and+password) instructions to get it.
 1. Download the powershell scripts to some folder. This will be the installation folder.
 1. Open a Powershell prompt **as admin**, `cd` to the installation folder and run the install script for the SVN working copy folder that you want to integrate with JIRA. For example, if your installation folder is `c:\SroDev\svn-jira\` and your working folder is `c:\SroDev\CurrentVersion`, run:

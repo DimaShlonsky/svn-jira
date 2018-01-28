@@ -73,9 +73,13 @@ try{
     #get the hooks for the dir
     $hooksText =  (Get-Item -Path Registry::HKEY_CURRENT_USER\Software\TortoiseSVN).GetValue("hooks")
     #replace the hooks
-    $hookLines = [System.Collections.ArrayList]($hooksText.Trim().Split("`n"));
-    if ((-not ($hooksText -eq "")) -and (($hookLines.Count % 6) -ne 0)){
-        throw "Unexpected error configuring Tortoise SVN hooks. Please configure them manually"
+    if (-not $hooksText){
+        $hookLines = New-Object "System.Collections.ArrayList"
+    }else{
+        $hookLines = [System.Collections.ArrayList]($hooksText.Trim().Split("`n"));
+        if ((-not ($hooksText -eq "")) -and (($hookLines.Count % 6) -ne 0)){
+            throw "Unexpected error configuring Tortoise SVN hooks. Please configure them manually"
+        }
     }
     Set-HookData $hookLines `
         @{

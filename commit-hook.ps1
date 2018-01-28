@@ -107,8 +107,8 @@ try{
         $cmd = $cmd.ToLower();
         $issue = $match.Groups["id"].Value
         if (-not $issue){
-            if ($mentionedIssues.Length -eq 1){
-                $issue = mentionedIssues[0]
+            if ($mentionedIssues.Count -eq 1){
+                $issue = $mentionedIssues[0]
             }
         }else{
             $mentionedIssues.Add($issue)
